@@ -1,0 +1,36 @@
+name: Python单元测试
+
+# 触发条件：推送代码或新建/更新 Pull Request 时运行
+on: [push, pull_request]
+
+jobs:
+  test:
+    # 运行环境：GitHub 托管的 Ubuntu 最新版虚拟机
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤1：检出代码 —— 把仓库代码取到虚拟环境的工作目录
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      # 步骤2：设置Python —— 配置指定版本的 Python 环境
+      # 教程原文写的是 actions/setup-python@v4，这里用 v5（同一动作的新主版本，
+      # 仍支持 3.11；v4 已停在老的 Node 运行时上）
+      - name: 设置Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # 步骤3：安装依赖 —— 安装测试所需的包（pytest）
+      - name: 安装依赖
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest
+          # 与 requirements.txt 保持一致，显式声明依赖便于本地复现
+          pip install -r requirements.txt
+
+      # 步骤4：运行测试 —— 执行 pytest，-v 参数显示每条用例的详细结果
+      # 用例全部通过时 pytest 退出码为 0，工作流显示绿色对勾；
+      # 任一用例失败则退出码非 0，整个 job 变红，日志中出现 FAILED 及断言差异。
+      - name: 运行测试
+        run: pytest -v

@@ -1,0 +1,5 @@
+# 项目依赖：单元测试只需要 pytest
+# 工作流里除了用 actions/setup-python 装 Python 外，还会执行
+#   python -m pip install -r requirements.txt
+# 所以这里必须声明 pytest，否则 Actions 上会报 "No module named pytest"。
+pytest>=8.0
