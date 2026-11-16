@@ -8,7 +8,7 @@
 
 def add(a, b):
     """两数相加。"""
-    return a * b  # 步骤5 故意的错误：用于观察 CI 失败
+    return a + b
 
 
 def multiply(a, b):
